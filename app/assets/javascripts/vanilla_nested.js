@@ -1,7 +1,7 @@
-(function(){
+(function () {
   // Get the html from the data attribute and insert the new fields on the container
   // "event" is the click event of the link created by the rails helper
-  window.addVanillaNestedFields = function(element) {
+  window.addVanillaNestedFields = function (element) {
     if (!element.classList.contains('vanilla-nested-add'))
       element = element.closest('.vanilla-nested-add')
 
@@ -25,7 +25,7 @@
     // add a class to show it was added dynamically
     inserted.classList.add('added-by-vanilla-nested');
 
-    _dispatchEvent(container, 'vanilla-nested:fields-added', element, {added: inserted})
+    _dispatchEvent(container, 'vanilla-nested:fields-added', element, { added: inserted })
 
     // dispatch an event if we reached the limit configured on the model
     if (data.limit) {
@@ -37,7 +37,7 @@
 
   // Removes the fields or hides them until the undo timer times out
   // "event" is the click event of the link created by the rails helper
-  window.removeVanillaNestedFields = function(element) {
+  window.removeVanillaNestedFields = function (element) {
     if (!element.classList.contains('vanilla-nested-remove'))
       element = element.closest('.vanilla-nested-remove')
 
@@ -50,9 +50,9 @@
       hideFieldsWithUndo(wrapper, element);
       _dispatchEvent(wrapper, 'vanilla-nested:fields-hidden', element);
     } else {
+      _dispatchEvent(wrapper, 'vanilla-nested:fields-removed', element);
       hideWrapper(wrapper);
       unhideFields(wrapper);
-      _dispatchEvent(wrapper, 'vanilla-nested:fields-removed', element);
     }
     wrapper.querySelector('[name$="[_destroy]"]').value = '1';
   }
@@ -99,7 +99,7 @@
     const undoLink = _createUndoWithElementsData(element.dataset);
     wrapper.appendChild(undoLink);
 
-    const _onUndoClicked = function(e) {
+    const _onUndoClicked = function (e) {
       e.preventDefault();
       clearTimeout(timer);
       unhideFields(wrapper);
@@ -111,7 +111,7 @@
     undoLink.addEventListener('click', _onUndoClicked);
 
     // start the timer
-    const _onTimerCompleted = function() {
+    const _onTimerCompleted = function () {
       hideWrapper(wrapper);
       unhideFields(wrapper);
       _dispatchEvent(wrapper, 'vanilla-nested:fields-removed', undoLink);
@@ -126,7 +126,7 @@
     if (!details) details = {};
     details.triggeredBy = triggeredBy;
 
-    let event = new CustomEvent(eventName, {bubbles: true, detail: details})
+    let event = new CustomEvent(eventName, { bubbles: true, detail: details })
     element.dispatchEvent(event);
   }
 
